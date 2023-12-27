@@ -66,7 +66,6 @@ def Img_Reszie_Merge(device,background , images , masks , gaussianblur , brightn
             flag = 1
         postions.append([x,y,w_i,h_i])
     final_masks = torch.zeros((1,1,wb,hb)).to(device)
-    # final_masks = []
     pos = []
     merge_img = background
     cut_imgs = []
@@ -77,13 +76,11 @@ def Img_Reszie_Merge(device,background , images , masks , gaussianblur , brightn
         cut_img = K.enhance.adjust_brightness(cut_img,brightness_factor[i],clip_output=False)
         cut_img = K.enhance.adjust_contrast(cut_img,contrast_factor[i],clip_output=False)
         cut_img = mask * cut_img
-        # cut_imgs.append(F.interpolate(cut_img,size=(256,256),mode="nearest"))
         postion = postions[i]  
         pad_mask = F.pad(mask , (postion[0] , wb-postion[0]-postion[2] , postion[1] , hb-postion[1]-postion[3]),value=0)
         pad_cut_img = F.pad(cut_img , (postion[0] , wb-postion[0]-postion[2] , postion[1] , hb-postion[1]-postion[3]),value=0)
         merge_img = merge_img * (1 - pad_mask) + pad_cut_img
         final_masks += pad_mask  # prepare for mask segmentation
-        # final_masks.append(pad_mask)
         center = center_of_mass(pad_mask)
         pos.append((center,i))
     pos.sort(key = lambda x:(x[0][0],x[0][1]))

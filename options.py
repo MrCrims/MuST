@@ -2,7 +2,6 @@ class TrainingOptions:
     """
     Configuration options for the training
     """
-
     def __init__(self,
                  batch_size: int,
                  number_of_epochs: int,

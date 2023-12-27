@@ -73,7 +73,6 @@ def cut_mask( pred_mask,threshold):
     return final_masks,labels,boxes.int()
 
 
-
 def cut_pos(center,cut_size = 256):
 
     d = round(cut_size/2)

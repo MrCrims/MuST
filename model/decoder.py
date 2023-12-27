@@ -8,7 +8,6 @@ from noise_layers.Merge_Image import center_of_mass
 import kornia as K
 import time
 from model.decodertool import *
-# from utils.utils import save_img
 
 class Decoder(nn.Module):
     """

@@ -34,17 +34,6 @@ def save_checkpoint(model: FWM, experiment_name: str, epoch: int, checkpoint_fol
     checkpoint_filename = f'{experiment_name}--epoch-{epoch}.pyt'
     checkpoint_filename = os.path.join(checkpoint_folder, checkpoint_filename)
     logging.info('Saving checkpoint to {}'.format(checkpoint_filename))
-    # checkpoint = {
-    #     'enc-model': model.encoder.state_dict(),
-    #     'enc-optim': model.optimizer_enc.state_dict(),
-    #     'dec-model': model.decoder.state_dict(),
-    #     'dec-optim': model.optimizer_dec.state_dict(),
-    #     'loc-model': model.localizer.state_dict(),
-    #     'loc-optim': model.optimizer_loc.state_dict(),
-    #     'discrim-model': model.discriminator.state_dict(),
-    #     'discrim-optim': model.optimizer_dis.state_dict(),
-    #     'epoch': epoch
-    # }
     checkpoint = {
         'enc-model': model.enc_dec.encoder.state_dict(),
         'dec-model': model.enc_dec.decoder.state_dict(),
@@ -55,11 +44,6 @@ def save_checkpoint(model: FWM, experiment_name: str, epoch: int, checkpoint_fol
         'discrim-optim': model.optimizer_dis.state_dict(),
         'epoch': epoch
     }
-    # checkpoint = {
-    #     'loc-model': model.localizer.state_dict(),
-    #     'loc-optim': model.optimizer_loc.state_dict(),
-    #     'epoch': epoch
-    # }
     torch.save(checkpoint, checkpoint_filename)
     logging.info('Saving checkpoint done.')
 

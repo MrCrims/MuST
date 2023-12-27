@@ -35,7 +35,6 @@ class Encoder(nn.Module):
         c_masks.squeeze_(0)
         mask_ids = torch.unique(c_masks)[1:]
         masks = c_masks == mask_ids[:,None,None]
-        print(masks.shape)
         boxes = torchvision.ops.masks_to_boxes(masks)
         boxes = boxes.int()
         cut_imgs = image * mask
@@ -44,7 +43,6 @@ class Encoder(nn.Module):
         origin_shape = []
         out_rec = []
         out_mask = []
-        print(boxes)
         if len(boxes)==0:
             boxes = [[0,0,H,W]*image.shape[0]]
         for i in range(len(s_cut_imgs)):

@@ -65,10 +65,6 @@ class FWM(nn.Module):
             d_target_label_encoded = torch.full((batch_size, 1), self.encoded_label, device=self.device)
             g_target_label_encoded = torch.full((batch_size, 1), self.cover_label, device=self.device)
 
-            
-
-          
-
             d_on_cover = self.discriminator(input_enc)
             d_loss_on_cover = self.bce_with_logits_loss(d_on_cover, d_target_label_cover.float())
             d_loss_on_cover.backward()
@@ -156,27 +152,11 @@ class FWM(nn.Module):
         self.localizer.eval()
 
         with torch.no_grad():
-            # Train discriminator
-
-            
-
-            # train encoder decoder localizer
-            
-            
             merge_image , final_mask , labels = self.image_merge(bg , images , masks)
             pred_mask = self.localizer(merge_image)
-
             pred_mask = torch.nn.functional.sigmoid(pred_mask)
-           
-            
-
             g_loss_loc = self.bce_loss(pred_mask.float(),final_mask.float())
             g_loss =   self.config.localization_loss * g_loss_loc
-
-
-            
-
-
         losses = {
             'loss           ': g_loss.item(),
             'loc_loss       ': g_loss_loc.item(),
@@ -191,18 +171,11 @@ class FWM(nn.Module):
         self.discriminator.eval()
 
         with torch.no_grad():
-            # Train discriminator
-            
-
             input_enc,im_w,decoded_messages , messages,final_mask,merge_image,encoded_images,pred_mask = self.enc_dec(images,masks,messages,bg,False,no_noise=True)
 
             d_target_label_cover = torch.full((batch_size, 1), self.cover_label, device=self.device)
             d_target_label_encoded = torch.full((batch_size, 1), self.encoded_label, device=self.device)
             g_target_label_encoded = torch.full((batch_size, 1), self.cover_label, device=self.device)
-
-            
-
-
 
             d_on_cover = self.discriminator(input_enc)
             d_loss_on_cover = self.bce_with_logits_loss(d_on_cover, d_target_label_cover.float())
@@ -220,9 +193,7 @@ class FWM(nn.Module):
             g_loss_dec = self.mse_loss(decoded_messages, messages)
             g_loss = self.config.adversarial_loss * g_loss_adv + self.config.encoder_loss * g_loss_enc \
                     + self.config.decoder_loss * g_loss_dec
-  
             
-
         decoded_rounded = decoded_messages.detach().cpu().numpy().round().clip(0, 1)
         bitwise_avg_err = np.sum(np.abs(decoded_rounded - messages.detach().cpu().numpy())) / (
             batch_size * messages.shape[1])

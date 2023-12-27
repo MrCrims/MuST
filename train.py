@@ -12,7 +12,6 @@ from collections import defaultdict
 from average_meter import AverageMeter
 import torchvision
 
-
 def train(model:FWM,
           device: torch.device,
           fwm_config: FWM_Options,
